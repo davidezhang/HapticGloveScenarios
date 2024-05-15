@@ -38,17 +38,17 @@ public class ColliderController : MonoBehaviour
     {
         if (!initialized && skeletonLeft.Capsules.Count > 0)
         {
-            foreach (OVRBoneCapsule collider in skeletonLeft.Capsules)
+            foreach (OVRBone collider in skeletonLeft.Bones)
             {
-                Visualizer vis = collider.CapsuleCollider.AddComponent<Visualizer>();
-                vis.BoneId = collider.BoneIndex;
+                Visualizer vis = collider.Transform.AddComponent<Visualizer>();
+                vis.BoneId = collider.Id;
                 vis.hand = OVRHand.Hand.HandLeft;
             }
         
-            foreach (OVRBoneCapsule collider in skeletonRight.Capsules)
+            foreach (OVRBone collider in skeletonRight.Bones)
             {
-                Visualizer vis = collider.CapsuleCollider.AddComponent<Visualizer>();
-                vis.BoneId = collider.BoneIndex;
+                Visualizer vis = collider.Transform.AddComponent<Visualizer>();
+                vis.BoneId = collider.Id;
                 vis.hand = OVRHand.Hand.HandRight;
             }
 
@@ -72,8 +72,8 @@ public class ColliderController : MonoBehaviour
             {
                 OVRSkeleton currentHand = vis.hand == OVRHand.Hand.HandLeft ? skeletonLeft : skeletonRight;
 
-                OVRSkeleton.BoneId id = currentHand.Bones[collision.collider.GetComponent<Visualizer>().BoneId].Id;
-                collidedFinger = OVRSkeleton.BoneLabelFromBoneId(OVRSkeleton.SkeletonType.HandLeft, id);
+                //OVRSkeleton.BoneId id = currentHand.Bones[collision.collider.GetComponent<Visualizer>().BoneId].Id;
+                collidedFinger = OVRSkeleton.BoneLabelFromBoneId(OVRSkeleton.SkeletonType.HandLeft, vis.BoneId);
                 vis.OnForceChanged(force);
             }
             debugText.text = "Collided! " + (int)force + " " + collidedFinger;
