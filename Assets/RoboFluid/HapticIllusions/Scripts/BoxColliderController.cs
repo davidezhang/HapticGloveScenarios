@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro.Examples;
@@ -11,14 +12,22 @@ public class BoxColliderController : MonoBehaviour
     private int currentIndex = 0;
     private bool isButtonVisible = false;
 
+    private Vector3 buttonOriginalScale;
+    private Vector3 boxOriginalScale;
+
     // Start is called before the first frame update
     void Start()
     {
         foreach(GameObject mysteryObject in mysteryObjects)
         {
+            mysteryObject.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
             mysteryObject.SetActive(false);
         }
 
+        boxOriginalScale = mysteryBox.transform.localScale;
+        buttonOriginalScale = nextButton.transform.localScale;
+
+        nextButton.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         nextButton.SetActive(false);
     }
 
@@ -52,6 +61,7 @@ public class BoxColliderController : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         nextButton.SetActive(true);
+        nextButton.transform.DOScale(buttonOriginalScale, 0.3f).SetEase(Ease.OutQuint);
         isButtonVisible = true;
     }
 
@@ -61,15 +71,28 @@ public class BoxColliderController : MonoBehaviour
         if (mysteryObjects[currentIndex].activeSelf == false)
         {
             mysteryObjects[currentIndex].SetActive(true);
-            mysteryBox.SetActive(false);
+            mysteryObjects[currentIndex].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutQuint);
+            mysteryBox.transform.DOScale(new Vector3(0.001f, 0.001f, 0.001f), 0.3f).SetEase(Ease.OutQuint).OnComplete(() =>
+            {
+                mysteryBox.SetActive(false);
+            });
+            
 
         } else
         {
             // If already revealed, move on to the next object
-            mysteryObjects[currentIndex].SetActive(false);
+            mysteryObjects[currentIndex].transform.DOScale(new Vector3(0.001f, 0.001f, 0.001f), 0.3f).SetEase(Ease.OutQuint).OnComplete(() =>
+            {
+                mysteryObjects[currentIndex].SetActive(false);
+            });
+            
             mysteryBox.SetActive(true);
+            mysteryBox.transform.DOScale(boxOriginalScale, 0.3f).SetEase(Ease.OutQuint);
             // Hide the next button
-            nextButton.SetActive(false);
+            nextButton.transform.DOScale(new Vector3(0.001f, 0.001f, 0.001f), 0.3f).SetEase(Ease.OutQuint).OnComplete(() =>{
+                nextButton.SetActive(false);
+            });
+            
             isButtonVisible = false;
             currentIndex++;
             if (currentIndex >= mysteryObjects.Length)
