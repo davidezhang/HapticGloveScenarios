@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/Meta XR Interaction SDK OVR Samples/63.0.0/Example Scenes/ComprehensiveRigExample.unity
-    guid: 2efe93cb8972cae439bfba2dcd4165f0
+    path: Assets/Scenes/HapticIllusions.unity
+    guid: 4277ff0bd24c63f438b022028a1e544b
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 5e127739b25e1314093b36bbe44aca0a,
       type: 2}
